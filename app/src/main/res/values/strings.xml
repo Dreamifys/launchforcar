@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Car AI Launcher</string>
+    <string name="switch_to_park_mode">切换到停车态</string>
+    <string name="switch_to_drive_mode">切换到驾驶态</string>
+    <string name="drive_mode_tag">主导航卡片</string>
+    <string name="park_mode_tag">停车娱乐卡片</string>
+    <string name="drive_mode_title">回家</string>
+    <string name="park_mode_title">停车放松</string>
+    <string name="drive_mode_meta">预计 28 分钟 · 18.4 km · 环路通畅</string>
+    <string name="park_mode_meta">艺术相框 · 音乐 · 视频 · 最近继续</string>
+    <string name="drive_mode_description">系统已根据过去 7 天通勤记录，推荐最优路线与最近播放列表。</string>
+    <string name="park_mode_description">已切换到停车娱乐态，主舞台可展示艺术屏保、视频推荐或本地媒体内容。</string>
+    <string name="start_navigation">一键导航</string>
+    <string name="view_alternative_routes">查看备选路线</string>
+    <string name="open_art_frame">打开艺术相框</string>
+    <string name="open_media_center">打开娱乐中心</string>
+</resources>

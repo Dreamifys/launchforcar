@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- iOS 风格背景渐变 - 低饱和柔色 -->
+    <color name="background_light_start">#FFF8F6F4</color>
+    <color name="background_light_end">#FFF2EFE9</color>
+    <color name="background_dark_start">#FF1C1C1E</color>
+    <color name="background_dark_end">#FF0A0A0C</color>
+    
+    <!-- iOS 毛玻璃表面颜色（半透明） -->
+    <color name="surface_glass_light">#CCFFFFFF</color>
+    <color name="surface_glass_dark">#CC2C2C2E</color>
+    <color name="surface_glass_ultra_light">#99FFFFFF</color>
+    <color name="surface_glass_ultra_dark">#992C2C2E</color>
+    
+    <!-- iOS 风格卡片背景 -->
+    <color name="card_background_light">#F2FFFFFF</color>
+    <color name="card_background_dark">#F22C2C2E</color>
+    
+    <!-- iOS 低饱和强调色 -->
+    <color name="accent_blue_ios">#FF007AFF</color>
+    <color name="accent_green_ios">#FF34C759</color>
+    <color name="accent_orange_ios">#FFFF9500</color>
+    <color name="accent_red_ios">#FFFF3B30</color>
+    <color name="accent_purple_ios">#FFAF52DE</color>
+    <color name="accent_teal_ios">#FF5AC8FA</color>
+    
+    <!-- iOS 文本颜色 -->
+    <color name="text_primary_light">#FF1C1C1E</color>
+    <color name="text_secondary_light">#8E1C1C1E</color>
+    <color name="text_tertiary_light">#481C1C1E</color>
+    <color name="text_quaternary_light">#2C1C1C1E</color>
+    
+    <color name="text_primary_dark">#FFFFFFFF</color>
+    <color name="text_secondary_dark">#99FFFFFF</color>
+    <color name="text_tertiary_dark">#66FFFFFF</color>
+    <color name="text_quaternary_dark">#3DFFFFFF</color>
+    
+    <!-- iOS 边框和高光 -->
+    <color name="border_hairline_light">#1A000000</color>
+    <color name="border_hairline_dark">#1AFFFFFF</color>
+    <color name="highlight_light">#0DFFFFFF</color>
+    <color name="highlight_dark">#0DFFFFFF</color>
+    
+    <!-- iOS 阴影颜色 -->
+    <color name="shadow_light">#1A000000</color>
+    <color name="shadow_medium">#0D000000</color>
+    <color name="shadow_soft">#08000000</color>
+    
+    <!-- iOS Chip 背景 -->
+    <color name="chip_background_light">#E5F2F2F2</color>
+    <color name="chip_background_dark">#E53A3A3C</color>
+    
+    <!-- 保留旧的颜色用于兼容 -->
+    <color name="background_drive_start">#FFF9F5F0</color>
+    <color name="background_drive_end">#FFF5F0EB</color>
+    <color name="background_park_start">#FFFDF8F6</color>
+    <color name="background_park_end">#FFF4EFE9</color>
+    <color name="surface_primary">#FFFFFFFF</color>
+    <color name="surface_light">#FFFFFFFF</color>
+    <color name="surface_dark">#FF2A2A2A</color>
+    <color name="surface_secondary">#FFF8F6F4</color>
+    <color name="surface_floating">#ECFFFFFF</color>
+    <color name="surface_transparent_light">#E6FFFFFF</color>
+    <color name="surface_transparent_dark">#E62A2A2A</color>
+    <color name="dock_background_light">#F5F5F5F5</color>
+    <color name="dock_background_dark">#F52A2A2A</color>
+    <color name="stroke_soft">#14243244</color>
+    <color name="stroke_light">#1A000000</color>
+    <color name="stroke_dark">#1AFFFFFF</color>
+    <color name="chip_background">#EAF1F7</color>
+    <color name="accent_blue">#4F8CFF</color>
+    <color name="accent_green">#FF4CAF50</color>
+    <color name="accent_orange">#FFFF9800</color>
+    <color name="accent_red">#FFF44336</color>
+    <color name="accent_mint">#4FBF9C</color>
+    <color name="accent_amber">#E6A03C</color>
+    <color name="text_primary">#FF16202A</color>
+    <color name="text_secondary">#B316202A</color>
+    <color name="text_tertiary">#7316202A</color>
+    <color name="map_route">#FF2196F3</color>
+    <color name="map_route_secondary">#6F5FB8D8</color>
+    <color name="map_road_soft">#4AFFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>

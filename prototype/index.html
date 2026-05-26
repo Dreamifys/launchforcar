@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car AI Launcher Prototype</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="prototype-shell drive-mode" id="appShell">
+      <div class="ambient ambient-one"></div>
+      <div class="ambient ambient-two"></div>
+
+      <header class="top-bar">
+        <div class="top-left">
+          <div class="time-block">
+            <span class="time">08:42</span>
+            <span class="date">周二 4月21日</span>
+          </div>
+          <div class="status-chip">北京 21°C 多云</div>
+          <div class="status-chip">5G</div>
+          <div class="status-chip">蓝牙已连接</div>
+        </div>
+        <div class="top-right">
+          <button class="ghost-button" id="modeToggle">切换到停车态</button>
+          <button class="ai-entry" id="aiToggle">AI 助手</button>
+        </div>
+      </header>
+
+      <main class="dashboard-layout">
+        <section class="hero-card card nav-card">
+          <div class="card-header">
+            <span class="card-tag">主导航卡片</span>
+            <span class="card-state">实时路况良好</span>
+          </div>
+          <div class="hero-content">
+            <div class="hero-copy">
+              <p class="eyebrow">下一个高频目的地</p>
+              <h1>回家</h1>
+              <p class="route-meta">预计 28 分钟 · 18.4 km · 环路通畅</p>
+              <p class="route-desc">系统已根据过去 7 天通勤记录，推荐最优路线与最近播放列表。</p>
+              <div class="hero-actions">
+                <button class="primary-button">一键导航</button>
+                <button class="secondary-button">查看备选路线</button>
+              </div>
+            </div>
+            <div class="map-panel">
+              <div class="map-grid"></div>
+              <div class="route-line route-one"></div>
+              <div class="route-line route-two"></div>
+              <div class="map-dot start"></div>
+              <div class="map-dot end"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="side-column">
+          <article class="card music-card">
+            <div class="card-header">
+              <span class="card-tag">音乐</span>
+              <span class="card-state accent-mint">QQ 音乐</span>
+            </div>
+            <div class="music-layout">
+              <div class="album-art"></div>
+              <div class="music-copy">
+                <h2>城市夜航</h2>
+                <p>柏林氛围电子精选</p>
+                <div class="progress-bar"><span></span></div>
+                <div class="mini-actions">
+                  <button>上一首</button>
+                  <button class="filled">播放中</button>
+                  <button>下一首</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card contact-card">
+            <div class="card-header">
+              <span class="card-tag">最近联系人</span>
+              <span class="card-state">一键拨号</span>
+            </div>
+            <div class="contact-list">
+              <div class="contact-item">
+                <div class="avatar amber">妈</div>
+                <div>
+                  <h3>妈妈</h3>
+                  <p>上次通话 18 分钟前</p>
+                </div>
+                <button>呼叫</button>
+              </div>
+              <div class="contact-item">
+                <div class="avatar blue">李</div>
+                <div>
+                  <h3>李工</h3>
+                  <p>常用联系人</p>
+                </div>
+                <button>呼叫</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card stats-card">
+            <div class="card-header">
+              <span class="card-tag">天气与车况</span>
+              <span class="card-state">今日通勤模式</span>
+            </div>
+            <div class="stats-grid">
+              <div>
+                <p class="metric-label">室外温度</p>
+                <p class="metric-value">21°</p>
+              </div>
+              <div>
+                <p class="metric-label">续航</p>
+                <p class="metric-value">468 km</p>
+              </div>
+              <div>
+                <p class="metric-label">停车位置</p>
+                <p class="metric-value small">B2 北区 18 号</p>
+              </div>
+              <div>
+                <p class="metric-label">路况评分</p>
+                <p class="metric-value accent-blue">A-</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+
+      <nav class="bottom-dock">
+        <button class="dock-item active">应用抽屉</button>
+        <button class="dock-item">地图</button>
+        <button class="dock-item">音乐</button>
+        <button class="dock-item">电话</button>
+        <button class="dock-item">任务场景</button>
+        <button class="dock-item">编辑</button>
+      </nav>
+
+      <aside class="ai-panel" id="aiPanel">
+        <div class="panel-header">
+          <div>
+            <p class="panel-eyebrow">AI 助手</p>
+            <h2>桌面编排建议</h2>
+          </div>
+          <button class="panel-close" id="aiClose">关闭</button>
+        </div>
+        <section class="panel-section">
+          <p class="section-title">你可以这样说</p>
+          <div class="suggestion-list">
+            <button>帮我创建一个下班回家桌面</button>
+            <button>把音乐卡片移动到首页右上角</button>
+            <button>停车时显示视频和艺术屏保</button>
+          </div>
+        </section>
+        <section class="panel-section">
+          <p class="section-title">推荐操作</p>
+          <div class="recommend-card">
+            <h3>创建“接娃模式”</h3>
+            <p>自动展示学校导航、最近联系人和儿童娱乐卡片。</p>
+            <button class="primary-button compact">立即创建</button>
+          </div>
+          <div class="recommend-card muted">
+            <h3>切换到夜间主题</h3>
+            <p>已检测到日落时间临近，可自动增强对比度。</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>

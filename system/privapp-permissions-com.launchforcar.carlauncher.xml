@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <privapp-permissions package="com.launchforcar.carlauncher">
+        <permission name="android.permission.QUERY_ALL_PACKAGES" />
+        <permission name="android.permission.REORDER_TASKS" />
+        <permission name="android.permission.MANAGE_ACTIVITY_TASKS" />
+        <permission name="android.permission.START_TASKS_FROM_RECENTS" />
+    </privapp-permissions>
+</permissions>

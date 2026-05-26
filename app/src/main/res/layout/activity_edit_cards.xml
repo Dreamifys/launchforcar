@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_launcher_drive"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="卡片编辑页"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="添加卡片、换模板、锁定布局"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/TopActionButton"
+            android:text="返回首页" />
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:columnCount="2">
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+            <TextView style="@style/SettingsTitle" android:text="添加导航卡片" />
+            <TextView style="@style/SettingsDescription" android:text="将回家、去公司、最近目的地加入桌面。" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+            <TextView style="@style/SettingsTitle" android:text="添加音乐卡片" />
+            <TextView style="@style/SettingsDescription" android:text="为首页增加音乐封面与播放控制组件。" />
+            <CheckBox
+                android:id="@+id/music_card_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/accent_blue"
+                android:text="显示音乐卡片"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+            <TextView style="@style/SettingsTitle" android:text="切换桌面模板" />
+            <TextView style="@style/SettingsDescription" android:text="标准横屏、超宽屏、停车娱乐态三套模板可选。" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsCard" android:orientation="vertical">
+            <TextView style="@style/SettingsTitle" android:text="锁定核心入口" />
+            <TextView style="@style/SettingsDescription" android:text="地图、音乐、电话、应用抽屉等不可误删。" />
+            <CheckBox
+                android:id="@+id/contact_card_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/accent_blue"
+                android:text="显示联系人卡片"
+                android:textColor="@color/text_primary" />
+
+            <CheckBox
+                android:id="@+id/stats_card_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/accent_blue"
+                android:text="显示天气与车况卡片"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
+    </GridLayout>
+
+</LinearLayout>

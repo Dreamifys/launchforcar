@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_launcher_drive"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置与账户中心"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="主题、驾驶员、自动化和系统集成"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/back_button"
+            style="@style/TopActionButton"
+            android:text="返回首页" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="18dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/SettingsCard"
+                android:orientation="vertical">
+
+                <TextView style="@style/SettingsTitle" android:text="驾驶员账户" />
+                <TextView style="@style/SettingsDescription" android:text="Sylvan · 主驾驶员 · 云同步未开启" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/SettingsCard"
+                android:orientation="vertical">
+
+                <TextView style="@style/SettingsTitle" android:text="主题与背景" />
+                <TextView style="@style/SettingsDescription" android:text="当前主题：深色高级量产风" />
+
+                <CheckBox
+                    android:id="@+id/auto_night_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:buttonTint="@color/accent_blue"
+                    android:text="启用夜间自动切换"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/SettingsCard"
+                android:orientation="vertical">
+
+                <TextView style="@style/SettingsTitle" android:text="场景自动化" />
+                <TextView style="@style/SettingsDescription" android:text="通勤模式、停车娱乐态、回家快捷场景" />
+
+                <CheckBox
+                    android:id="@+id/scene_automation_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:buttonTint="@color/accent_blue"
+                    android:text="启用场景自动化"
+                    android:textColor="@color/text_primary" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/SettingsCard"
+                android:orientation="vertical">
+
+                <TextView style="@style/SettingsTitle" android:text="系统集成" />
+                <TextView style="@style/SettingsDescription" android:text="蓝牙电话、音乐控制、天气服务已接入；车辆总线待 OEM 集成" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

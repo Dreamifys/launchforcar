@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 地图悬浮窗布局（画中画模式） -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_glass_card">
+
+    <!-- 高德地图 WebView -->
+    <WebView
+        android:id="@+id/mapWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp" />
+
+    <!-- 关闭按钮 -->
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_ios_button"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:contentDescription="关闭悬浮窗"
+        android:scaleType="centerInside"
+        android:elevation="4dp" />
+
+</FrameLayout>

@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light_start">
+
+    <!-- 主内容区域 - iOS 风格两栏布局 -->
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="0dp">
+
+        <!-- 左侧地图区域（iOS 毛玻璃效果） -->
+        <FrameLayout
+            android:id="@+id/map_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_map_glass"
+            android:elevation="8dp">
+
+            <!-- 地图占位符 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🗺️"
+                    android:textSize="72sp"
+                    android:alpha="0.8" />
+
+                <TextView
+                    android:id="@+id/map_hint_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="地图显示区域"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="点击启动 · 长按设置"
+                    android:textColor="@color/text_tertiary_light"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- 右侧信息面板 -->
+        <LinearLayout
+            android:id="@+id/info_panel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
+            android:orientation="vertical">
+
+            <!-- 可滑动的三模块区域（天气/车辆/快捷按钮） -->
+            <FrameLayout
+                android:id="@+id/swipe_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:clipChildren="false">
+
+                <!-- 天气卡片（默认显示） -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/weather_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="0dp"
+                    app:cardBackgroundColor="@color/card_background_light"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="当前天气"
+                                android:textColor="@color/text_tertiary_light"
+                                android:textSize="13sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🌤️"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/weather_temp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="21°C"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="36sp"
+                            android:fontFamily="sans-serif-light" />
+
+                        <TextView
+                            android:id="@+id/weather_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="晴朗"
+                            android:textColor="@color/text_secondary_light"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="湿度 65%"
+                                android:textColor="@color/text_secondary_light"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="风速 12km/h"
+                                android:textColor="@color/text_secondary_light"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- 页面指示器 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:id="@+id/indicator_weather"
+                                android:layout_width="24dp"
+                                android:layout_height="4dp"
+                                android:background="@color/accent_blue_ios" />
+
+                            <View
+                                android:id="@+id/indicator_car"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/text_quaternary_light" />
+
+                            <View
+                                android:id="@+id/indicator_quick"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/text_quaternary_light" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="6dp"
+                            android:text="← 左右滑动切换 →"
+                            android:textColor="@color/text_quaternary_light"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 车辆状态卡片（初始隐藏） -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/car_status_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/card_background_light"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="车辆状态"
+                                android:textColor="@color/text_tertiary_light"
+                                android:textSize="13sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🚗"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:columnCount="2"
+                            android:rowCount="2">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="12dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="续航"
+                                    android:textColor="@color/text_tertiary_light"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/car_range"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="420 km"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="20sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_marginBottom="12dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="电量"
+                                    android:textColor="@color/text_tertiary_light"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/car_fuel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="78%"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="20sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:layout_marginEnd="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="胎压"
+                                    android:textColor="@color/text_tertiary_light"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/car_tire"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="2.5 bar"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="20sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="里程"
+                                    android:textColor="@color/text_tertiary_light"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/car_mileage"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="18,500 km"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="20sp"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+                        </GridLayout>
+
+                        <!-- 页面指示器 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:id="@+id/indicator_car_1"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:background="@color/text_quaternary_light" />
+
+                            <View
+                                android:id="@+id/indicator_car_2"
+                                android:layout_width="24dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/accent_blue_ios" />
+
+                            <View
+                                android:id="@+id/indicator_car_3"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/text_quaternary_light" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="6dp"
+                            android:text="← 左右滑动切换 →"
+                            android:textColor="@color/text_quaternary_light"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- 快捷按钮模块（初始隐藏） -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/status_module_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/card_background_light"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- 状态栏 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp">
+
+                            <TextView
+                                android:id="@+id/status_time"
+                                style="@style/StatusChip"
+                                android:text="12:30" />
+
+                            <TextView
+                                android:id="@+id/status_weather"
+                                style="@style/StatusChip"
+                                android:layout_marginStart="8dp"
+                                android:text="☀️ 21°C" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/status_location"
+                                style="@style/StatusChip"
+                                android:text="📍 科技园" />
+                        </LinearLayout>
+
+                        <!-- 快捷操作按钮 -->
+                        <LinearLayout
+                            android:id="@+id/bottom_quick_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/quick_nav"
+                                style="@style/QuickButton"
+                                android:text="🧭 导航" />
+
+                            <TextView
+                                android:id="@+id/quick_music"
+                                style="@style/QuickButton"
+                                android:text="🎵 音乐" />
+
+                            <TextView
+                                android:id="@+id/quick_phone"
+                                style="@style/QuickButton"
+                                android:text="📞 电话" />
+
+                            <TextView
+                                android:id="@+id/quick_apps"
+                                style="@style/QuickButton"
+                                android:text="📱 应用" />
+
+                            <TextView
+                                android:id="@+id/quick_settings"
+                                style="@style/QuickButton"
+                                android:text="⚙️ 设置" />
+                        </LinearLayout>
+
+                        <!-- 页面指示器 -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:id="@+id/indicator_quick_1"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:background="@color/text_quaternary_light" />
+
+                            <View
+                                android:id="@+id/indicator_quick_2"
+                                android:layout_width="8dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/text_quaternary_light" />
+
+                            <View
+                                android:id="@+id/indicator_quick_3"
+                                android:layout_width="24dp"
+                                android:layout_height="4dp"
+                                android:layout_marginStart="6dp"
+                                android:background="@color/accent_blue_ios" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="6dp"
+                            android:text="← 左右滑动切换 →"
+                            android:textColor="@color/text_quaternary_light"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </FrameLayout>
+
+            <!-- 音乐卡片（固定在下方） -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/music_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/card_background_light"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="正在播放"
+                            android:textColor="@color/text_tertiary_light"
+                            android:textSize="13sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎵"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/music_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="未播放音乐"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="17sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/music_artist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="点击选择音乐应用"
+                        android:textColor="@color/text_secondary_light"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/music_prev"
+                            style="@style/MusicControlButton"
+                            android:text="⏮" />
+
+                        <TextView
+                            android:id="@+id/music_play"
+                            style="@style/MusicControlButton"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:text="▶️" />
+
+                        <TextView
+                            android:id="@+id/music_next"
+                            style="@style/MusicControlButton"
+                            android:text="⏭" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
