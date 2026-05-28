@@ -18,7 +18,7 @@
         android:label="Car AI Launcher"
         android:resizeableActivity="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CarAILauncher">
+        android:theme="@style/Theme.CarAILauncher.Dark">
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
@@ -31,6 +31,11 @@
             android:name=".ui.drawer.AppDrawerActivity"
             android:exported="false"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.floating.FloatingAppSelectorActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.CarAILauncher.Dark" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -47,7 +52,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 地图悬浮窗服务 -->
         <service
             android:name=".service.FloatingMapService"
             android:enabled="true"

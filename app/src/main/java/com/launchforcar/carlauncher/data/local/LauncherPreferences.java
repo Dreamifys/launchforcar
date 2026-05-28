@@ -16,14 +16,13 @@ public class LauncherPreferences {
     private static final String KEY_LEFT_STAGE_APP_PACKAGE = "left_stage_app_package";
     private static final String KEY_RIGHT_STAGE_APP_PACKAGE = "right_stage_app_package";
 
-    // 地图显示模式
-    private static final String KEY_MAP_DISPLAY_MODE = "map_display_mode"; // "embedded", "external" 或 "floating"
-    
-    // 地图悬浮窗状态
+    private static final String KEY_MAP_DISPLAY_MODE = "map_display_mode";
     private static final String KEY_MAP_FLOATING_ENABLED = "map_floating_enabled";
-    
-    // 高德地图 Web API Key
     private static final String KEY_AMAP_WEB_KEY = "amap_web_key";
+    private static final String KEY_ASSOCIATED_FLOATING_PACKAGE = "associated_floating_package";
+    private static final String KEY_ASSOCIATED_FLOATING_APP_NAME = "associated_floating_app_name";
+    private static final String KEY_FLOATING_SHOW_ACTION = "floating_show_action";
+    private static final String KEY_FLOATING_CLOSE_ACTION = "floating_close_action";
 
     private final SharedPreferences sharedPreferences;
 
@@ -102,46 +101,60 @@ public class LauncherPreferences {
     public void setRightStageAppPackage(String packageName) {
         sharedPreferences.edit().putString(KEY_RIGHT_STAGE_APP_PACKAGE, packageName == null ? "" : packageName).apply();
     }
-    
-    /**
-     * 获取高德地图Web服务Key
-     */
+
     public String getAmapWebKey() {
         return sharedPreferences.getString(KEY_AMAP_WEB_KEY, "");
     }
-    
-    /**
-     * 设置高德地图Web服务Key
-     */
+
     public void setAmapWebKey(String key) {
         sharedPreferences.edit().putString(KEY_AMAP_WEB_KEY, key).apply();
     }
-    
-    /**
-     * 获取地图显示模式
-     */
+
     public String getMapDisplayMode() {
         return sharedPreferences.getString(KEY_MAP_DISPLAY_MODE, "embedded");
     }
-    
-    /**
-     * 设置地图显示模式
-     */
+
     public void setMapDisplayMode(String mode) {
         sharedPreferences.edit().putString(KEY_MAP_DISPLAY_MODE, mode).apply();
     }
-    
-    /**
-     * 是否启用地图悬浮窗
-     */
+
     public boolean isMapFloatingEnabled() {
         return sharedPreferences.getBoolean(KEY_MAP_FLOATING_ENABLED, true);
     }
-    
-    /**
-     * 设置地图悬浮窗启用状态
-     */
+
     public void setMapFloatingEnabled(boolean enabled) {
         sharedPreferences.edit().putBoolean(KEY_MAP_FLOATING_ENABLED, enabled).apply();
+    }
+
+    public String getAssociatedFloatingPackage() {
+        return sharedPreferences.getString(KEY_ASSOCIATED_FLOATING_PACKAGE, "");
+    }
+
+    public void setAssociatedFloatingPackage(String packageName) {
+        sharedPreferences.edit().putString(KEY_ASSOCIATED_FLOATING_PACKAGE, packageName == null ? "" : packageName).apply();
+    }
+
+    public String getAssociatedFloatingAppName() {
+        return sharedPreferences.getString(KEY_ASSOCIATED_FLOATING_APP_NAME, "");
+    }
+
+    public void setAssociatedFloatingAppName(String appName) {
+        sharedPreferences.edit().putString(KEY_ASSOCIATED_FLOATING_APP_NAME, appName == null ? "" : appName).apply();
+    }
+
+    public String getFloatingShowAction() {
+        return sharedPreferences.getString(KEY_FLOATING_SHOW_ACTION, "");
+    }
+
+    public void setFloatingShowAction(String action) {
+        sharedPreferences.edit().putString(KEY_FLOATING_SHOW_ACTION, action == null ? "" : action).apply();
+    }
+
+    public String getFloatingCloseAction() {
+        return sharedPreferences.getString(KEY_FLOATING_CLOSE_ACTION, "");
+    }
+
+    public void setFloatingCloseAction(String action) {
+        sharedPreferences.edit().putString(KEY_FLOATING_CLOSE_ACTION, action == null ? "" : action).apply();
     }
 }

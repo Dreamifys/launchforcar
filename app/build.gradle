@@ -4,13 +4,13 @@ plugins {
 
 android {
     namespace 'com.launchforcar.carlauncher'
-    compileSdk 34
-    buildToolsVersion '34.0.0' // Explicitly specify installed Android Build Tools version to avoid fallback to missing 30.0.3
+    compileSdk 33
+    buildToolsVersion '33.0.2'
 
     defaultConfig {
         applicationId "com.launchforcar.carlauncher"
         minSdk 19
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "0.1.0"
 

@@ -50,6 +50,20 @@
     <color name="chip_background_light">#E5F2F2F2</color>
     <color name="chip_background_dark">#E53A3A3C</color>
     
+    <!-- 深色主题颜色 -->
+    <color name="dark_bg_main">#FF1a1a2e</color>
+    <color name="dark_bg_gradient_start">#FF1a1a2e</color>
+    <color name="dark_bg_gradient_end">#FF16213e</color>
+    <color name="dark_card_bg">#FF252542</color>
+    <color name="dark_text_primary">#FFFFFFFF</color>
+    <color name="dark_text_secondary">#B3FFFFFF</color>
+    <color name="dark_text_tertiary">#66FFFFFF</color>
+    
+    <!-- 导航按钮颜色 -->
+    <color name="nav_btn_nav">#FF007AFF</color>
+    <color name="nav_btn_home">#FFFF9500</color>
+    <color name="nav_btn_work">#FF34C759</color>
+    
     <!-- 保留旧的颜色用于兼容 -->
     <color name="background_drive_start">#FFF9F5F0</color>
     <color name="background_drive_end">#FFF5F0EB</color>
