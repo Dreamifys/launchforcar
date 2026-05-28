@@ -15,4 +15,5 @@
     <string name="view_alternative_routes">查看备选路线</string>
     <string name="open_art_frame">打开艺术相框</string>
     <string name="open_media_center">打开娱乐中心</string>
+    <string name="accessibility_service_description">监控应用切换，当从关联应用返回桌面时自动触发悬浮窗显示</string>
 </resources>

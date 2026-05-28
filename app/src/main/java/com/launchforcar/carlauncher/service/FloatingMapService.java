@@ -5,64 +5,58 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.launchforcar.carlauncher.R;
+import com.launchforcar.carlauncher.data.local.LauncherPreferences;
 
 /**
- * 地图悬浮窗服务
- * 用于在桌面上层显示高德地图导航窗口（画中画模式）
+ * 地图悬浮窗触发服务
+ * 用于向高德地图发送广播显示悬浮窗
  */
 public class FloatingMapService extends Service {
     private static final String TAG = "FloatingMapService";
     private static final String CHANNEL_ID = "floating_map_channel";
     private static final int NOTIFICATION_ID = 1001;
+    public static final String ACTION_TRIGGER_FLOATING = "com.launchforcar.TRIGGER_FLOATING";
+    public static final String ACTION_CLOSE_FLOATING = "com.launchforcar.CLOSE_FLOATING";
     
-    private WindowManager windowManager;
-    private View floatingView;
-    private WebView mapView;
-    private WindowManager.LayoutParams params;
-    
-    // 悬浮窗初始位置
-    private int initialX;
-    private int initialY;
-    private float initialTouchX;
-    private float initialTouchY;
+    private LauncherPreferences preferences;
     
     @Override
     public void onCreate() {
         super.onCreate();
+        preferences = new LauncherPreferences(this);
         Log.d(TAG, "悬浮窗服务创建");
         
-        // 创建通知渠道
         createNotificationChannel();
-        
-        // 启动前台服务
         startForeground(NOTIFICATION_ID, createNotification());
-        
-        // 创建悬浮窗
-        createFloatingWindow();
     }
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "悬浮窗服务启动");
+        Log.d(TAG, "悬浮窗服务启动, action=" + (intent != null ? intent.getAction() : "null"));
+        
+        if (intent != null) {
+            String action = intent.getAction();
+            if (ACTION_TRIGGER_FLOATING.equals(action)) {
+                // 读取位置信息
+                int x = intent.getIntExtra("x", 0);
+                int y = intent.getIntExtra("y", 0);
+                int width = intent.getIntExtra("width", 0);
+                int height = intent.getIntExtra("height", 0);
+                triggerFloatingWindow(x, y, width, height);
+            } else if (ACTION_CLOSE_FLOATING.equals(action)) {
+                closeFloatingWindow();
+            }
+        }
+        
         return START_STICKY;
     }
     
@@ -76,22 +70,88 @@ public class FloatingMapService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "悬浮窗服务销毁");
+    }
+    
+    private void triggerFloatingWindow() {
+        triggerFloatingWindow(0, 0, 0, 0);
+    }
+    
+    private void triggerFloatingWindow(int x, int y, int width, int height) {
+        String showAction = preferences.getFloatingShowAction();
+        String associatedPackage = preferences.getAssociatedFloatingPackage();
         
-        // 移除悬浮窗
-        if (windowManager != null && floatingView != null) {
-            windowManager.removeView(floatingView);
+        Log.d(TAG, "Triggering floating window, action=" + showAction + ", pkg=" + associatedPackage + 
+              ", x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
+        
+        if (showAction != null && !showAction.isEmpty()) {
+            try {
+                Intent intent = new Intent(showAction);
+                
+                // 如果有传入位置信息，使用传入的；否则使用默认值
+                int finalX = (x > 0) ? x : 50;
+                int finalY = (y > 0) ? y : 100;
+                int finalWidth = (width > 0) ? width : 600;
+                int finalHeight = (height > 0) ? height : 400;
+                
+                // 高德地图悬浮窗广播参数
+                if ("com.autonavi.plus.showmap".equals(showAction)) {
+                    intent.putExtra("x", finalX);
+                    intent.putExtra("y", finalY);
+                    intent.putExtra("w", finalWidth);
+                    intent.putExtra("h", finalHeight);
+                } else {
+                    // 其他应用使用通用参数
+                    intent.putExtra("x", finalX);
+                    intent.putExtra("y", finalY);
+                    intent.putExtra("width", finalWidth);
+                    intent.putExtra("height", finalHeight);
+                }
+                
+                // 不设置Package，让所有应用都能收到这个广播
+                // if (associatedPackage != null && !associatedPackage.isEmpty()) {
+                //     intent.setPackage(associatedPackage);
+                // }
+                
+                sendBroadcast(intent);
+                Log.d(TAG, "Sent show broadcast: " + showAction + ", x=" + finalX + ", y=" + finalY + ", w=" + finalWidth + ", h=" + finalHeight);
+                Toast.makeText(this, "已触发悬浮窗", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to send show broadcast", e);
+                Toast.makeText(this, "触发悬浮窗失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "未配置悬浮窗广播", Toast.LENGTH_SHORT).show();
         }
     }
     
-    /**
-     * 创建通知渠道
-     */
+    private void closeFloatingWindow() {
+        String closeAction = preferences.getFloatingCloseAction();
+        String associatedPackage = preferences.getAssociatedFloatingPackage();
+        
+        Log.d(TAG, "Closing floating window, action=" + closeAction);
+        
+        if (closeAction != null && !closeAction.isEmpty()) {
+            try {
+                Intent intent = new Intent(closeAction);
+                
+                if (associatedPackage != null && !associatedPackage.isEmpty()) {
+                    intent.setPackage(associatedPackage);
+                }
+                
+                sendBroadcast(intent);
+                Log.d(TAG, "Sent close broadcast: " + closeAction);
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to send close broadcast", e);
+            }
+        }
+    }
+    
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                "地图悬浮窗",
-                NotificationManager.IMPORTANCE_LOW
+                    CHANNEL_ID,
+                    "地图悬浮窗",
+                    NotificationManager.IMPORTANCE_LOW
             );
             channel.setDescription("显示地图导航悬浮窗");
             
@@ -102,126 +162,12 @@ public class FloatingMapService extends Service {
         }
     }
     
-    /**
-     * 创建前台服务通知
-     */
     private Notification createNotification() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("地图悬浮窗运行中")
-            .setContentText("点击关闭悬浮窗")
-            .setSmallIcon(R.drawable.ic_maps)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .build();
-    }
-    
-    /**
-     * 创建悬浮窗
-     */
-    private void createFloatingWindow() {
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        
-        // 加载悬浮窗布局
-        floatingView = LayoutInflater.from(this).inflate(R.layout.view_floating_map, null);
-        
-        // 设置悬浮窗参数
-        params = new WindowManager.LayoutParams(
-            dpToPx(400),  // 宽度
-            dpToPx(300),  // 高度
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O 
-                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY 
-                : WindowManager.LayoutParams.TYPE_PHONE,
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL 
-                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-            PixelFormat.TRANSLUCENT
-        );
-        
-        // 设置初始位置（右上角）
-        params.gravity = Gravity.TOP | Gravity.END;
-        params.x = dpToPx(20);
-        params.y = dpToPx(100);
-        
-        // 添加悬浮窗
-        windowManager.addView(floatingView, params);
-        
-        // 初始化地图 WebView
-        initMapView();
-        
-        // 设置拖动功能
-        setupDraggable();
-        
-        // 设置关闭按钮
-        setupCloseButton();
-        
-        Log.d(TAG, "悬浮窗已创建");
-    }
-    
-    /**
-     * 初始化地图 WebView
-     */
-    private void initMapView() {
-        mapView = floatingView.findViewById(R.id.mapWebView);
-        
-        if (mapView != null) {
-            WebSettings webSettings = mapView.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setDomStorageEnabled(true);
-            webSettings.setGeolocationEnabled(true);
-            webSettings.setBuiltInZoomControls(false);
-            webSettings.setDisplayZoomControls(false);
-            
-            mapView.setWebViewClient(new WebViewClient());
-            
-            // 加载高德地图 HTML
-            mapView.loadUrl("file:///android_asset/amap.html");
-            
-            Log.d(TAG, "地图 WebView 已初始化");
-        }
-    }
-    
-    /**
-     * 设置拖动功能
-     */
-    private void setupDraggable() {
-        floatingView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        initialX = params.x;
-                        initialY = params.y;
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        return true;
-                        
-                    case MotionEvent.ACTION_MOVE:
-                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
-                        windowManager.updateViewLayout(floatingView, params);
-                        return true;
-                }
-                return false;
-            }
-        });
-    }
-    
-    /**
-     * 设置关闭按钮
-     */
-    private void setupCloseButton() {
-        ImageButton closeButton = floatingView.findViewById(R.id.btnClose);
-        if (closeButton != null) {
-            closeButton.setOnClickListener(v -> {
-                stopSelf();
-                Toast.makeText(this, "悬浮窗已关闭", Toast.LENGTH_SHORT).show();
-            });
-        }
-    }
-    
-    /**
-     * dp 转 px
-     */
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round(dp * density);
+                .setContentTitle("悬浮窗服务运行中")
+                .setContentText("监控应用切换并触发悬浮窗")
+                .setSmallIcon(R.drawable.ic_maps)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build();
     }
 }

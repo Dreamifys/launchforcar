@@ -1,5 +1,6 @@
 package com.launchforcar.carlauncher;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.launchforcar.carlauncher.data.local.LauncherPreferences;
+import com.launchforcar.carlauncher.service.FloatingMapService;
 import com.launchforcar.carlauncher.ui.drawer.AppDrawerActivity;
 import com.launchforcar.carlauncher.ui.floating.FloatingAppSelectorActivity;
 
@@ -45,8 +49,11 @@ public class MainActivity extends AppCompatActivity {
         setupListeners();
         updateDateTime();
 
-        // 延迟启动悬浮窗，避免立即崩溃
-        handler.postDelayed(this::autoLaunchFloatingMap, 500);
+        // 等待视图测量完成后再启动悬浮窗
+        View mapContainer = findViewById(R.id.map_container);
+        mapContainer.post(() -> {
+            handler.postDelayed(this::autoLaunchFloatingMap, 300);
+        });
     }
 
     private void setupSystemBars() {
@@ -64,19 +71,37 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         enableImmersiveMode();
         updateDateTime();
+        // 应用回到前台，重新启动悬浮窗
+        autoLaunchFloatingMap();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 应用暂停，关闭悬浮窗
+        closeFloatingMap();
+    }
+
+    private void closeFloatingMap() {
+        String associatedPackage = launcherPreferences.getAssociatedFloatingPackage();
+        String showAction = launcherPreferences.getFloatingShowAction();
+        
+        if (associatedPackage == null || associatedPackage.isEmpty() || 
+            showAction == null || showAction.isEmpty()) {
+            return;
+        }
+        
+        // 启动 FloatingMapService 关闭悬浮窗
+        Intent serviceIntent = new Intent(this, FloatingMapService.class);
+        serviceIntent.setAction(FloatingMapService.ACTION_CLOSE_FLOATING);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
     }
 
     private void setupListeners() {
-        findViewById(R.id.nav_btn).setOnClickListener(v -> launchAssociatedFloatingApp());
-        findViewById(R.id.home_btn).setOnClickListener(v -> {
-            Toast.makeText(this, "导航回家", Toast.LENGTH_SHORT).show();
-            launchAssociatedFloatingApp();
-        });
-        findViewById(R.id.work_btn).setOnClickListener(v -> {
-            Toast.makeText(this, "导航去公司", Toast.LENGTH_SHORT).show();
-            launchAssociatedFloatingApp();
-        });
-
         findViewById(R.id.music_play).setOnClickListener(v -> openMusicApp());
         findViewById(R.id.music_prev).setOnClickListener(v -> Toast.makeText(this, "上一曲", Toast.LENGTH_SHORT).show());
         findViewById(R.id.music_next).setOnClickListener(v -> Toast.makeText(this, "下一曲", Toast.LENGTH_SHORT).show());
@@ -126,13 +151,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        try {
-            Intent intent = new Intent(showAction);
-            sendBroadcast(intent);
-            Toast.makeText(this, "正在启动悬浮窗...", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(this, "启动失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        // 启动 FloatingMapService 来触发悬浮窗，传递位置信息
+        launchFloatingMapWithPosition();
     }
 
     private void launchAssociatedFloatingApp() {
@@ -149,24 +169,50 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if (showAction != null && !showAction.isEmpty()) {
-            try {
-                Intent intent = new Intent(showAction);
-                sendBroadcast(intent);
-                Toast.makeText(this, "正在启动悬浮窗...", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "启动失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+        // 使用 FloatingMapService 来发送广播触发悬浮窗（不跳转），传递位置信息
+        launchFloatingMapWithPosition();
+    }
+
+    private void launchFloatingMapWithPosition() {
+        // 直接获取屏幕尺寸计算位置
+        WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+        
+        // 左侧Dock栏是60dp，转换成像素
+        int leftDockWidth = dpToPx(60);
+        // 右侧插件区是280dp
+        int rightPanelWidth = dpToPx(280);
+        
+        // 计算中间区域位置
+        int x = leftDockWidth; // 从左侧Dock栏右边开始
+        int y = 0; // 从屏幕顶部开始
+        int width = screenWidth - leftDockWidth - rightPanelWidth; // 中间区域宽度
+        int height = screenHeight; // 高度全屏
+        
+        Log.d("MainActivity", "Screen: " + screenWidth + "x" + screenHeight + 
+              ", x=" + x + ", y=" + y + ", w=" + width + ", h=" + height);
+        
+        Intent serviceIntent = new Intent(this, FloatingMapService.class);
+        serviceIntent.setAction(FloatingMapService.ACTION_TRIGGER_FLOATING);
+        serviceIntent.putExtra("x", x);
+        serviceIntent.putExtra("y", y);
+        serviceIntent.putExtra("width", width);
+        serviceIntent.putExtra("height", height);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
         } else {
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(associatedPackage);
-            if (launchIntent != null) {
-                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(launchIntent);
-                Toast.makeText(this, "正在启动应用...", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "无法启动应用", Toast.LENGTH_SHORT).show();
-            }
+            startService(serviceIntent);
         }
+    }
+    
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return (int) (dp * density + 0.5f);
     }
 
     private void openFloatingAppSelector() {

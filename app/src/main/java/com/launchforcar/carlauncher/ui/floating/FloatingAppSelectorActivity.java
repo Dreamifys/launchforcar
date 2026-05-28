@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.launchforcar.carlauncher.R;
 import com.launchforcar.carlauncher.data.local.LauncherPreferences;
+import com.launchforcar.carlauncher.service.FloatingMapService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +40,7 @@ public class FloatingAppSelectorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_floating_app_selector_simple);
         loadApps();
         setupViews();
+        checkAccessibilityService();
     }
 
     private void loadApps() {
@@ -75,6 +78,10 @@ public class FloatingAppSelectorActivity extends AppCompatActivity {
         findViewById(R.id.close_button).setOnClickListener(v -> finish());
     }
 
+    private void checkAccessibilityService() {
+        // 这里可以添加检查无障碍服务是否已开启的逻辑
+    }
+
     private void showActionDialog(AppInfo app) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("选择应用: " + app.appName);
@@ -100,6 +107,7 @@ public class FloatingAppSelectorActivity extends AppCompatActivity {
     private String getDefaultAction(String packageName) {
         String lower = packageName.toLowerCase();
         if (lower.contains("amap") || lower.contains("autonavi") || lower.contains("高德")) {
+            // 使用正确的高德悬浮窗广播
             return "com.autonavi.plus.showmap";
         }
         if (lower.contains("baidu") || lower.contains("百度")) {
@@ -123,11 +131,18 @@ public class FloatingAppSelectorActivity extends AppCompatActivity {
         launcherPreferences.setAssociatedFloatingPackage(app.packageName);
         launcherPreferences.setAssociatedFloatingAppName(app.appName);
         launcherPreferences.setFloatingShowAction(action);
-        launcherPreferences.setFloatingCloseAction(action.replace("show", "close"));
+        
+        // 高德地图特殊处理：关闭Action是 com.autonavi.plus.closemap
+        String closeAction = action;
+        if ("com.autonavi.plus.showmap".equals(action)) {
+            closeAction = "com.autonavi.plus.closemap";
+        } else {
+            closeAction = action.replace("show", "close");
+        }
+        launcherPreferences.setFloatingCloseAction(closeAction);
 
         Toast.makeText(this, "已关联: " + app.appName, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(action);
-        sendBroadcast(intent);
+        
         finish();
     }
 
